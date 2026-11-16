@@ -15,9 +15,11 @@ class MyApp extends StatelessWidget {
       title: 'MyPortfolio',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.indigo,
-          secondary: Colors.amber[700],
+          seedColor: AppColors.brown,
+          secondary: AppColors.peach,
         ),
+        // Latar belakang seluruh halaman memakai warna krem.
+        scaffoldBackgroundColor: AppColors.cream,
         useMaterial3: true,
       ),
       home: MyHomePage(),
