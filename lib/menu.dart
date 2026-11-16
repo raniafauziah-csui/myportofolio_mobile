@@ -1,32 +1,43 @@
 import 'package:flutter/material.dart';
 
+// Palet warna aplikasi agar semua bagian halaman selaras.
+class AppColors {
+  static const Color brown = Color(0xFF563D3A); // teks & AppBar
+  static const Color cream = Color(0xFFF0DCC7); // latar belakang halaman
+  static const Color peach = Color(0xFFE8A06F); // aksen pengganti krem
+  static const Color rose = Color(0xFFC47F78); // aksen tambahan
+}
+
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});
 
-  final String npm = "2406000001";
-  final String nama = "Burhan";
-  final String kelas = "PBP A";
+  final String npm = "2506595070";
+  final String nama = "Rania Fauziah Nur Wahyudi";
+  final String kelas = "PBP D";
 
   final List<ItemHomepage> items = [
-    ItemHomepage("Lihat Proyek", Icons.folder),
-    ItemHomepage("Tambah Proyek", Icons.add_circle),
-    ItemHomepage("Logout", Icons.logout),
+    // Krem diganti peach agar tidak menyatu dengan latar belakang.
+    ItemHomepage("Lihat Proyek", Icons.folder, AppColors.peach),
+    ItemHomepage("Tambah Proyek", Icons.add_circle, AppColors.rose),
+    ItemHomepage("Logout", Icons.logout, AppColors.brown),
   ];
 
     @override
   Widget build(BuildContext context) {
     // Scaffold menyediakan struktur visual dasar halaman (AppBar, Body, SnackBar).
     return Scaffold(
+      // Latar belakang halaman memakai warna krem.
+      backgroundColor: AppColors.cream,
       // AppBar menampilkan bar bagian atas halaman aplikasi.
       appBar: AppBar(
         title: const Text(
           'MyPortfolio',
           style: TextStyle(
-            color: Colors.white,
+            color: AppColors.cream,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: AppColors.brown,
       ),
       // Body halaman utama dengan padding di sekelilingnya.
       body: Padding(
@@ -55,6 +66,7 @@ class MyHomePage extends StatelessWidget {
                     child: Text(
                       'Selamat datang di MyPortfolio Mobile!',
                       style: TextStyle(
+                        color: AppColors.brown,
                         fontWeight: FontWeight.bold,
                         fontSize: 18.0,
                       ),
@@ -94,6 +106,8 @@ class InfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      // Kartu memakai warna peach agar selaras dengan palet.
+      color: AppColors.peach,
       // Memberikan efek bayangan kartu elevasi 2 unit.
       elevation: 2.0,
       child: Container(
@@ -105,10 +119,18 @@ class InfoCard extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                color: AppColors.brown,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 8.0),
-            Text(content),
+            // textAlign agar nama panjang tetap rapi di tengah kartu.
+            Text(
+              content,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: AppColors.brown),
+            ),
           ],
         ),
       ),
@@ -119,8 +141,9 @@ class InfoCard extends StatelessWidget {
 class ItemHomepage {
   final String name;
   final IconData icon;
+  final Color color;
 
-  ItemHomepage(this.name, this.icon);
+  ItemHomepage(this.name, this.icon, this.color);
 }
 
 class ItemCard extends StatelessWidget {
@@ -130,9 +153,16 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Warna teks/ikon menyesuaikan kecerahan latar kartu:
+    // latar gelap -> krem, latar terang -> coklat.
+    final Color foregroundColor =
+        ThemeData.estimateBrightnessForColor(item.color) == Brightness.dark
+            ? AppColors.cream
+            : AppColors.brown;
+
     return Material(
-      // Menggunakan warna sekunder dari skema tema aplikasi.
-      color: Theme.of(context).colorScheme.secondary,
+      // Menggunakan warna unik yang dimiliki masing-masing item.
+      color: item.color,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         // Aksi ketika kartu ditekan oleh pengguna.
@@ -141,7 +171,13 @@ class ItemCard extends StatelessWidget {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!"))
+              SnackBar(
+                content: Text(
+                  "Kamu telah menekan tombol ${item.name}!",
+                  style: const TextStyle(color: AppColors.cream),
+                ),
+                backgroundColor: AppColors.brown,
+              ),
             );
         },
         child: Container(
@@ -152,14 +188,14 @@ class ItemCard extends StatelessWidget {
               children: [
                 Icon(
                   item.icon,
-                  color: Colors.white,
+                  color: foregroundColor,
                   size: 30.0,
                 ),
                 const Padding(padding: EdgeInsets.all(3)),
                 Text(
                   item.name,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(color: foregroundColor),
                 ),
               ],
             ),
