@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:myportofolio_mobile/widgets/left_drawer.dart';
+import 'package:myportofolio_mobile/widgets/project_card.dart';
 
 // Palet warna aplikasi agar semua bagian halaman selaras.
 class AppColors {
@@ -22,7 +24,7 @@ class MyHomePage extends StatelessWidget {
     ItemHomepage("Logout", Icons.logout, AppColors.brown),
   ];
 
-    @override
+  @override
   Widget build(BuildContext context) {
     // Scaffold menyediakan struktur visual dasar halaman (AppBar, Body, SnackBar).
     return Scaffold(
@@ -32,13 +34,12 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'MyPortfolio',
-          style: TextStyle(
-            color: AppColors.cream,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: AppColors.cream, fontWeight: FontWeight.bold),
         ),
         backgroundColor: AppColors.brown,
       ),
+      drawer: const LeftDrawer(),
+
       // Body halaman utama dengan padding di sekelilingnya.
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -144,64 +145,4 @@ class ItemHomepage {
   final Color color;
 
   ItemHomepage(this.name, this.icon, this.color);
-}
-
-class ItemCard extends StatelessWidget {
-  final ItemHomepage item;
-
-  const ItemCard(this.item, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    // Warna teks/ikon menyesuaikan kecerahan latar kartu:
-    // latar gelap -> krem, latar terang -> coklat.
-    final Color foregroundColor =
-        ThemeData.estimateBrightnessForColor(item.color) == Brightness.dark
-            ? AppColors.cream
-            : AppColors.brown;
-
-    return Material(
-      // Menggunakan warna unik yang dimiliki masing-masing item.
-      color: item.color,
-      borderRadius: BorderRadius.circular(12),
-      child: InkWell(
-        // Aksi ketika kartu ditekan oleh pengguna.
-        onTap: () {
-          // Menampilkan SnackBar dengan pesan interaktif.
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text(
-                  "Kamu telah menekan tombol ${item.name}!",
-                  style: const TextStyle(color: AppColors.cream),
-                ),
-                backgroundColor: AppColors.brown,
-              ),
-            );
-        },
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  item.icon,
-                  color: foregroundColor,
-                  size: 30.0,
-                ),
-                const Padding(padding: EdgeInsets.all(3)),
-                Text(
-                  item.name,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: foregroundColor),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }
