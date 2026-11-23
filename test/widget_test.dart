@@ -47,25 +47,26 @@ void main() {
     expect(find.text('Logout'), findsOneWidget);
   });
 
-  testWidgets('Kartu aksi membuka form dengan Navigator.push dan bisa kembali', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(const MyApp());
+  testWidgets(
+    'Kartu aksi membuka form dengan Navigator.push dan bisa kembali',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(const MyApp());
 
-    await tester.tap(find.text('Tambah Pendidikan'));
-    await tester.pumpAndSettle();
-    expect(find.byType(EducationFormPage), findsOneWidget);
+      await tester.tap(find.text('Tambah Pendidikan'));
+      await tester.pumpAndSettle();
+      expect(find.byType(EducationFormPage), findsOneWidget);
 
-    // Navigator.push membuat rute bisa di-pop (tombol kembali perangkat).
-    final NavigatorState navigator = tester.state<NavigatorState>(
-      find.byType(Navigator).first,
-    );
-    expect(navigator.canPop(), isTrue);
-    navigator.pop();
-    await tester.pumpAndSettle();
+      // Navigator.push membuat rute bisa di-pop (tombol kembali perangkat).
+      final NavigatorState navigator = tester.state<NavigatorState>(
+        find.byType(Navigator).first,
+      );
+      expect(navigator.canPop(), isTrue);
+      navigator.pop();
+      await tester.pumpAndSettle();
 
-    expect(find.byType(MyHomePage), findsOneWidget);
-  });
+      expect(find.byType(MyHomePage), findsOneWidget);
+    },
+  );
 
   testWidgets('Drawer membuka Add Education dan Home kembali ke menu', (
     WidgetTester tester,
@@ -106,6 +107,9 @@ void main() {
     expect(find.text('Tanggal selesai wajib dipilih.'), findsOneWidget);
     expect(find.text('Deskripsi tidak boleh kosong.'), findsOneWidget);
 
+    // Input tidak valid tidak boleh memunculkan dialog ringkasan.
+    expect(find.byType(AlertDialog), findsNothing);
+
     await tester.enterText(field('Nama Institusi'), '   ');
     await _tapSave(tester);
     await tester.pump();
@@ -116,10 +120,7 @@ void main() {
     await tester.pump();
     expect(find.text('Nama institusi minimal 3 karakter.'), findsOneWidget);
 
-    await tester.enterText(
-      field('Tautan Sertifikat (opsional)'),
-      'bukan-url',
-    );
+    await tester.enterText(field('Tautan Sertifikat (opsional)'), 'bukan-url');
     await _tapSave(tester);
     await tester.pump();
     expect(
@@ -148,10 +149,7 @@ void main() {
   testWidgets('Form menyimpan data yang valid', (WidgetTester tester) async {
     await tester.pumpWidget(const MaterialApp(home: EducationFormPage()));
 
-    await tester.enterText(
-      field('Nama Institusi'),
-      'Universitas Indonesia',
-    );
+    await tester.enterText(field('Nama Institusi'), 'Universitas Indonesia');
     await tester.enterText(field('Jurusan'), 'Ilmu Komputer');
     await tester.enterText(
       field('Tautan Sertifikat (opsional)'),
@@ -168,5 +166,24 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Pendidikan berhasil ditambahkan!'), findsOneWidget);
+    expect(find.text('Institusi: Universitas Indonesia'), findsOneWidget);
+    expect(find.text('Jenjang: S1'), findsOneWidget);
+    expect(find.text('Jurusan: Ilmu Komputer'), findsOneWidget);
+    expect(find.text('Tautan: https://example.com/sertifikat'), findsOneWidget);
+    expect(
+      find.text('Deskripsi: Aktif dalam kegiatan kampus dan lomba.'),
+      findsOneWidget,
+    );
+
+    // Tombol OK menutup dialog dan mengembalikan pengguna ke formulir.
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AlertDialog), findsNothing);
+    expect(find.byType(EducationFormPage), findsOneWidget);
+    expect(
+      tester.widget<TextFormField>(field('Nama Institusi')).controller!.text,
+      isEmpty,
+    );
   });
 }
