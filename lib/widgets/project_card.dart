@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myportofolio_mobile/screens/education_form.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
 import 'package:myportofolio_mobile/screens/project_form.dart';
 
@@ -30,12 +31,22 @@ class ItemCard extends StatelessWidget {
               SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!")),
             );
 
-          // Navigate ke halaman yang sesuai
-          if (item.name == "Tambah Proyek") {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ProjectFormPage()),
-            );
+          // Navigator.push membuat tombol kembali bawaan tetap tersedia.
+          switch (item.name) {
+            case 'Tambah Proyek':
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ProjectFormPage()),
+              );
+              break;
+            case 'Tambah Pendidikan':
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const EducationFormPage(),
+                ),
+              );
+              break;
           }
         },
         child: Container(

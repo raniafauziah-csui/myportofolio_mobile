@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myportofolio_mobile/screens/menu.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 
 class ProjectFormPage extends StatefulWidget {
@@ -28,10 +29,16 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.cream,
       appBar: AppBar(
-        title: const Center(child: Text('Add Project Form')),
-        backgroundColor: Colors.indigo,
-        foregroundColor: Colors.white,
+        title: const Center(
+          child: Text(
+            'Add Project Form',
+            style: TextStyle(color: AppColors.cream, fontWeight: FontWeight.bold),
+          ),
+        ),
+        backgroundColor: AppColors.brown,
+        iconTheme: const IconThemeData(color: AppColors.cream),
       ),
       drawer: const LeftDrawer(),
       body: Form(
@@ -155,8 +162,8 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
                 alignment: Alignment.centerRight,
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.indigo,
-                    foregroundColor: Colors.white,
+                    backgroundColor: AppColors.rose,
+                    foregroundColor: AppColors.brown,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20,
                       vertical: 12,
