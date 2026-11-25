@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:myportofolio_mobile/services/auth_state.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 import 'package:myportofolio_mobile/widgets/project_card.dart';
+import 'package:provider/provider.dart';
 
 // Palet warna aplikasi agar semua bagian halaman selaras.
 class AppColors {
@@ -12,22 +14,27 @@ class AppColors {
 }
 
 class MyHomePage extends StatelessWidget {
-  MyHomePage({super.key});
+  const MyHomePage({super.key});
 
   final String npm = "2506595070";
   final String nama = "Rania Fauziah Nur Wahyudi";
   final String kelas = "PBP D";
 
-  final List<ItemHomepage> items = [
-    // Krem diganti peach agar tidak menyatu dengan latar belakang.
-    ItemHomepage("Lihat Proyek", Icons.folder, AppColors.peach),
-    ItemHomepage("Tambah Proyek", Icons.add_circle, AppColors.rose),
-    ItemHomepage("Tambah Pendidikan", Icons.school, AppColors.terracotta),
-    ItemHomepage("Logout", Icons.logout, AppColors.brown),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final bool isLoggedIn = context.watch<AuthState>().isLoggedIn;
+    final List<ItemHomepage> items = [
+      ItemHomepage("Lihat Proyek", Icons.folder, AppColors.peach),
+      ItemHomepage("Lihat Skill", Icons.auto_stories, AppColors.terracotta),
+      ItemHomepage("Tambah Proyek", Icons.add_circle, AppColors.rose),
+      ItemHomepage("Tambah Pendidikan", Icons.school, AppColors.terracotta),
+      ItemHomepage(
+        isLoggedIn ? "Logout" : "Login",
+        isLoggedIn ? Icons.logout : Icons.login,
+        AppColors.brown,
+      ),
+    ];
+
     // Scaffold menyediakan struktur visual dasar halaman (AppBar, Body, SnackBar).
     return Scaffold(
       // Latar belakang halaman memakai warna krem.

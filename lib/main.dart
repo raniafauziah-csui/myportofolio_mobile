@@ -1,29 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
+import 'package:myportofolio_mobile/services/api_client.dart';
+import 'package:myportofolio_mobile/services/auth_state.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, this.apiClient});
 
-  // This widget is the root of your application.
+  final ApiClient? apiClient;
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'MyPortfolio',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppColors.brown,
-          secondary: AppColors.peach,
+    return MultiProvider(
+      providers: [
+        Provider<ApiClient>(
+          create: (_) => apiClient ?? ApiClient(),
+          dispose: (_, client) => client.close(),
         ),
-        // Latar belakang seluruh halaman memakai warna krem.
-        scaffoldBackgroundColor: AppColors.cream,
-        useMaterial3: true,
+        ChangeNotifierProvider<AuthState>(
+          create: (context) => AuthState(context.read<ApiClient>()),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'MyPortfolio',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: AppColors.brown,
+            secondary: AppColors.peach,
+          ),
+          scaffoldBackgroundColor: AppColors.cream,
+          useMaterial3: true,
+        ),
+        home: const MyHomePage(),
       ),
-      home: MyHomePage(),
     );
   }
 }
-

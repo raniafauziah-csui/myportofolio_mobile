@@ -44,7 +44,8 @@ void main() {
     expect(find.text('Rania Fauziah Nur Wahyudi'), findsOneWidget);
     expect(find.text('Tambah Proyek'), findsOneWidget);
     expect(find.text('Tambah Pendidikan'), findsOneWidget);
-    expect(find.text('Logout'), findsOneWidget);
+    expect(find.text('Lihat Skill'), findsOneWidget);
+    expect(find.text('Login'), findsOneWidget);
   });
 
   testWidgets(
@@ -52,6 +53,7 @@ void main() {
     (WidgetTester tester) async {
       await tester.pumpWidget(const MyApp());
 
+      await tester.ensureVisible(find.text('Tambah Pendidikan'));
       await tester.tap(find.text('Tambah Pendidikan'));
       await tester.pumpAndSettle();
       expect(find.byType(EducationFormPage), findsOneWidget);
